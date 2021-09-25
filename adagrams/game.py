@@ -30,6 +30,7 @@ LETTER_POOL = {
     'Z': 1
 }
 
+
 def draw_letters():
     letters = []
     letters_counter = {}
@@ -45,6 +46,7 @@ def draw_letters():
                 letters_counter[random_letter] = 1
     return letters
 
+
 def uses_available_letters(word, letter_bank):
     for letter in word:
         if word.count(letter) > letter_bank.count(letter):
@@ -52,7 +54,6 @@ def uses_available_letters(word, letter_bank):
     return True
 
         
-
 def score_word(word):
     letter_score = {
         ("A", "E", "I", "O", "U", "L", "N", "R", "S", "T"): 1,
@@ -74,21 +75,21 @@ def score_word(word):
     
 
 def get_highest_word_score(word_list):
-    word_score = {}
+    max_score_words= []
+    max_score = 0
     for word in word_list:
-        word_score[word] = score_word(word)
-    max_score = max(list(word_score.values()))
-    winners = []
-    for key, value in word_score.items():
-        if value == max_score:
-            winners.append((key, value))
-    min_value = len(winners[0][0])
-    for item in winners:
-        min_value = min(min_value, len(item[0]))
-    winner = None
-    for item in winners:
-        if len(item[0]) == 10:
-            return item
-        elif len(item[0]) == min_value:
-            winner = item
-    return winner
+        score = score_word(word)
+        if score > max_score:
+            max_score = score
+            max_score_words = [(word, max_score)]
+        elif score == max_score:
+            max_score_words.append((word, max_score))
+
+    min_word = max_score_words[0]
+    for word in max_score_words:
+        if len(word[0]) == 10:
+            return word
+        elif len(word[0]) < len(min_word[0]):
+            min_word = word
+    return min_word
+
